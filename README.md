@@ -117,7 +117,7 @@ Dự án đã có sẵn cấu hình tự động tại `.github/workflows/deploy
    ```
 
 2. **Cấu hình trên GitHub Repository:**
-   - Truy cập vào repository của bạn: `https://github.com/hoanggia776123-svg/HGia.github.io`
+   - Truy cập vào repository của bạn: `https://github.com/hoanggia776123-svg/hoanggia776123-svg.github.io`
    - Nhấn vào tab **Settings** (Cài đặt) -> chọn mục **Pages** ở thanh menu bên trái.
    - Tại mục **Build and deployment** -> **Source**, chọn **GitHub Actions**.
 

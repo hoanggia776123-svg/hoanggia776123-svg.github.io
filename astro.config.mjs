@@ -12,9 +12,12 @@ let site = 'https://hoanggia776123-svg.github.io';
 if (process.env.BASE_PATH) {
   base = process.env.BASE_PATH;
 } else if (rawRepo) {
-  // If repository matches <owner>.github.io, it is a root user/org site.
-  // Otherwise, it is a project site and requires the /<repo>/ base.
-  const isUserSite = repo && owner && repo.toLowerCase() === `${owner.toLowerCase()}.github.io`;
+  // If repository matches <owner>.github.io or user site, root is '/'
+  const isUserSite =
+    repo &&
+    owner &&
+    (repo.toLowerCase() === `${owner.toLowerCase()}.github.io` ||
+      repo.toLowerCase() === 'hoanggia776123-svg.github.io');
   base = isUserSite ? '/' : `/${repo}/`;
   site = `https://${owner}.github.io`;
 }

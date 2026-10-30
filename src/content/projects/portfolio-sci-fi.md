@@ -3,8 +3,8 @@ title: "Futuristic Cyber Portfolio"
 description: "Trang web cá nhân mang phong cách phòng thí nghiệm AI tương lai, xây dựng với Astro v5 và Tailwind CSS."
 date: "2026-10"
 techStack: ["Astro", "TypeScript", "Tailwind CSS", "GitHub Actions"]
-demoUrl: "https://hoanggia776123-svg.github.io/HGia.github.io/"
-repoUrl: "https://github.com/hoanggia776123-svg/HGia.github.io"
+demoUrl: "https://hoanggia776123-svg.github.io/"
+repoUrl: "https://github.com/hoanggia776123-svg/hoanggia776123-svg.github.io"
 featured: true
 status: "completed"
 ---
