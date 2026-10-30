@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+import { Layers, SlidersHorizontal, AlertCircle } from 'lucide-astro';
+
+const allProjects = await getCollection('projects');
+---
+
+<BaseLayout
+  title="Hồ sơ dự án // [YOUR_NAME]"
+  description="Danh mục các đồ án, sản phẩm và công cụ mã nguồn mở đã thực hiện."
+>
+  <div class="space-y-10">
+    <!-- Header -->
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-900 border border-cyan-500/30 text-xs font-mono text-cyan-400 mb-4">
+        <Layers class="w-3.5 h-3.5" />
+        <span>REPOSITORIES // PROJECTS</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-3">
+        Hồ sơ Dự án
+      </h1>
+      <p class="text-sm text-slate-400 max-w-2xl leading-relaxed">
+        Các sản phẩm cá nhân, đồ án học tập và thử nghiệm công nghệ. Nhấn vào từng dự án để xem chi tiết kiến trúc và giải pháp kỹ thuật.
+      </p>
+    </div>
+
+    <!-- Filter Controls -->
+    <div class="cyber-card p-4 flex flex-wrap items-center gap-2">
+      <span class="text-xs font-mono text-slate-400 mr-2 flex items-center gap-1">
+        <SlidersHorizontal class="w-3.5 h-3.5" />
+        <span>Trạng thái:</span>
+      </span>
+
+      <button
+        class="project-filter-btn px-3 py-1 rounded-md text-xs font-mono border transition-all bg-cyan-500/20 text-cyan-300 border-cyan-400 shadow-[0_0_10px_rgba(0,242,254,0.3)]"
+        data-filter="all"
+      >
+        Tất cả ({allProjects.length})
+      </button>
+
+      <button
+        class="project-filter-btn px-3 py-1 rounded-md text-xs font-mono border border-cyan-900/40 bg-cyber-900/60 text-slate-300 hover:border-cyan-400/60 hover:text-cyan-300 transition-all"
+        data-filter="completed"
+      >
+        Hoàn thành ({allProjects.filter((p) => p.data.status === 'completed').length})
+      </button>
+
+      <button
+        class="project-filter-btn px-3 py-1 rounded-md text-xs font-mono border border-cyan-900/40 bg-cyber-900/60 text-slate-300 hover:border-cyan-400/60 hover:text-cyan-300 transition-all"
+        data-filter="in-progress"
+      >
+        Đang phát triển ({allProjects.filter((p) => p.data.status === 'in-progress').length})
+      </button>
+    </div>
+
+    <!-- Projects Grid -->
+    <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+        allProjects.map((project) => (
+          <div class="project-wrapper" data-status={project.data.status}>
+            <ProjectCard
+              title={project.data.title}
+              description={project.data.description}
+              date={project.data.date}
+              techStack={project.data.techStack}
+              demoUrl={project.data.demoUrl}
+              repoUrl={project.data.repoUrl}
+              status={project.data.status}
+              slug={project.id}
+              featured={project.data.featured}
+            />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  function setupProjectFilters() {
+    const filterButtons = document.querySelectorAll('.project-filter-btn');
+    const projectCards = document.querySelectorAll('.project-wrapper');
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter');
+
+        filterButtons.forEach((b) => {
+          b.classList.remove('bg-cyan-500/20', 'text-cyan-300', 'border-cyan-400', 'shadow-[0_0_10px_rgba(0,242,254,0.3)]');
+          b.classList.add('border-cyan-900/40', 'bg-cyber-900/60', 'text-slate-300');
+        });
+
+        btn.classList.add('bg-cyan-500/20', 'text-cyan-300', 'border-cyan-400', 'shadow-[0_0_10px_rgba(0,242,254,0.3)]');
+        btn.classList.remove('border-cyan-900/40', 'bg-cyber-900/60', 'text-slate-300');
+
+        projectCards.forEach((card) => {
+          const el = card as HTMLElement;
+          const status = el.dataset.status;
+          if (filter === 'all' || status === filter) {
+            el.style.display = 'block';
+          } else {
+            el.style.display = 'none';
+          }
+        });
+      });
+    });
+  }
+
+  setupProjectFilters();
+  document.addEventListener('astro:after-swap', setupProjectFilters);
+</script>

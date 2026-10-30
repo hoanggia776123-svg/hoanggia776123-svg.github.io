@@ -1,0 +1,102 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Tag from '../../components/Tag.astro';
+import { url } from '../../utils/base';
+import { ArrowLeft, ExternalLink, Github, Layers, Calendar, CheckCircle } from 'lucide-astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const statusLabels = {
+  completed: 'Hoàn thành',
+  'in-progress': 'Đang phát triển',
+  archived: 'Lưu trữ',
+};
+---
+
+<BaseLayout
+  title={`${project.data.title} // Dự án`}
+  description={project.data.description}
+>
+  <div class="max-w-4xl mx-auto space-y-10">
+    <!-- Back to projects -->
+    <a
+      href={url('/projects/')}
+      class="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors group"
+    >
+      <ArrowLeft class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" />
+      <span>&lt; Quay lại danh sách dự án</span>
+    </a>
+
+    <!-- Project Header -->
+    <header class="cyber-card p-6 sm:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+        <span class="text-xs font-mono px-2.5 py-1 rounded border border-cyan-500/40 bg-cyan-950/40 text-cyan-300">
+          Trạng thái: {statusLabels[project.data.status]}
+        </span>
+        {project.data.date && (
+          <span class="text-xs font-mono text-slate-400 flex items-center gap-1.5">
+            <Calendar class="w-3.5 h-3.5 text-cyan-400" />
+            <span>{project.data.date}</span>
+          </span>
+        )}
+      </div>
+
+      <h1 class="text-2xl sm:text-4xl font-bold text-slate-100 mb-4">
+        {project.data.title}
+      </h1>
+
+      <p class="text-sm sm:text-base text-slate-300 leading-relaxed mb-6">
+        {project.data.description}
+      </p>
+
+      <!-- Tech Stack -->
+      <div class="flex flex-wrap gap-1.5 mb-6">
+        {project.data.techStack.map((tech: string) => (
+          <Tag tag={tech} />
+        ))}
+      </div>
+
+      <!-- Action Links -->
+      <div class="pt-6 border-t border-slate-800 flex flex-wrap items-center gap-4 text-xs font-mono">
+        {project.data.demoUrl && (
+          <a
+            href={project.data.demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 rounded-lg bg-cyan-400 text-slate-950 font-semibold hover:bg-cyan-300 shadow-[0_0_15px_rgba(0,242,254,0.3)] transition-all flex items-center gap-2"
+          >
+            <ExternalLink class="w-4 h-4" />
+            <span>Xem Demo trực tiếp</span>
+          </a>
+        )}
+
+        {project.data.repoUrl && (
+          <a
+            href={project.data.repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-4 py-2 rounded-lg bg-cyber-900 border border-cyan-500/30 text-slate-200 hover:border-cyan-400 hover:text-cyan-300 transition-all flex items-center gap-2"
+          >
+            <Github class="w-4 h-4" />
+            <span>Mã nguồn trên GitHub</span>
+          </a>
+        )}
+      </div>
+    </header>
+
+    <!-- Markdown Content (Problem, Solution, Architecture) -->
+    <article class="prose prose-invert prose-cyan max-w-none prose-headings:font-semibold prose-headings:text-slate-100 prose-p:text-slate-300 prose-p:leading-relaxed prose-a:text-cyan-400 hover:prose-a:text-cyan-300 prose-pre:bg-cyber-900/90 prose-pre:border prose-pre:border-cyan-500/20">
+      <Content />
+    </article>
+  </div>
+</BaseLayout>

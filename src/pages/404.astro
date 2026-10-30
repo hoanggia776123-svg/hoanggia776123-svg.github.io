@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../utils/base';
+import { Terminal, ArrowLeft, AlertTriangle } from 'lucide-astro';
+---
+
+<BaseLayout
+  title="404 - Không tìm thấy trang // [YOUR_NAME]"
+  description="Liên kết bạn truy cập không tồn tại hoặc đã được di dời sang địa chỉ khác."
+>
+  <div class="py-20 max-w-xl mx-auto text-center">
+    <div class="w-16 h-16 rounded-2xl bg-rose-950/60 border border-rose-500/40 text-rose-400 flex items-center justify-center mx-auto mb-6 shadow-[0_0_25px_rgba(244,63,94,0.3)]">
+      <AlertTriangle class="w-8 h-8" />
+    </div>
+
+    <div class="font-mono text-xs text-rose-400 tracking-widest uppercase mb-2">
+      // ERROR: 404_PAGE_NOT_FOUND
+    </div>
+
+    <h1 class="text-3xl sm:text-5xl font-bold text-slate-100 mb-4 font-mono">
+      TỌA ĐỘ KHÔNG TỒN TẠI
+    </h1>
+
+    <p class="text-xs sm:text-sm text-slate-400 mb-8 leading-relaxed">
+      Hệ thống không tìm thấy tài nguyên tại đường dẫn được yêu cầu. Địa chỉ có thể đã bị thay đổi hoặc chưa được khởi tạo trong cụm máy chủ.
+    </p>
+
+    <div class="p-4 rounded-lg bg-cyber-900 border border-slate-800 text-left font-mono text-xs text-slate-400 mb-8 max-w-md mx-auto space-y-1">
+      <div class="text-rose-400">&gt; STATUS: 404 ERR_ROUTE_UNRESOLVED</div>
+      <div>&gt; PROTOCOL: HTTPS / STATIC_ROUTING</div>
+      <div class="text-emerald-400">&gt; SUGGESTION: RETURNING TO SECURE HOMEPAGE</div>
+    </div>
+
+    <a
+      href={url('/')}
+      class="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-mono text-xs font-semibold bg-cyan-400 text-slate-950 hover:bg-cyan-300 shadow-[0_0_20px_rgba(0,242,254,0.3)] transition-all"
+    >
+      <ArrowLeft class="w-4 h-4" />
+      <span>Trở về Trang chủ</span>
+    </a>
+  </div>
+</BaseLayout>

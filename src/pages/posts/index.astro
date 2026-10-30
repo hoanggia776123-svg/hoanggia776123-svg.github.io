@@ -1,0 +1,175 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { BookOpen, Search, SlidersHorizontal, AlertCircle } from 'lucide-astro';
+
+// Exclude drafts in production
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+// Collect all unique categories and tags
+const allCategories = Array.from(new Set(sortedPosts.map((p) => p.data.category))).sort();
+const allTags = Array.from(new Set(sortedPosts.flatMap((p) => p.data.tags))).sort();
+---
+
+<BaseLayout
+  title="Bài viết & Ghi chú kỹ thuật // [YOUR_NAME]"
+  description="Bộ sưu tập các bài viết, cẩm nang và ghi chú kỹ thuật về lập trình, kiến trúc web và AI."
+>
+  <div class="space-y-10">
+    <!-- Header -->
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-900 border border-cyan-500/30 text-xs font-mono text-cyan-400 mb-4">
+        <BookOpen class="w-3.5 h-3.5" />
+        <span>KNOWLEDGE_BASE // POSTS</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-3">
+        Bài viết & Ghi chú
+      </h1>
+      <p class="text-sm text-slate-400 max-w-2xl leading-relaxed">
+        Những kiến thức, bài học và kinh nghiệm thực tiễn được ghi chép lại dưới định dạng Markdown, dễ dàng tra cứu và chia sẻ.
+      </p>
+    </div>
+
+    <!-- Search & Filter Controls -->
+    <div class="cyber-card p-5 space-y-4">
+      <div class="relative">
+        <Search class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <input
+          id="post-search"
+          type="text"
+          placeholder="Tìm kiếm bài viết theo tiêu đề, mô tả hoặc chủ đề..."
+          class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-cyber-950/80 border border-cyan-500/30 text-xs sm:text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all font-mono"
+        />
+      </div>
+
+      <!-- Categories filter pills -->
+      <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800">
+        <span class="text-xs font-mono text-slate-400 mr-1 flex items-center gap-1">
+          <SlidersHorizontal class="w-3.5 h-3.5" />
+          <span>Danh mục:</span>
+        </span>
+
+        <button
+          class="category-filter-btn px-2.5 py-1 rounded-md text-xs font-mono border transition-all active-cat bg-cyan-500/20 text-cyan-300 border-cyan-400 shadow-[0_0_10px_rgba(0,242,254,0.3)]"
+          data-category="all"
+        >
+          Tất cả ({sortedPosts.length})
+        </button>
+
+        {
+          allCategories.map((cat) => {
+            const count = sortedPosts.filter((p) => p.data.category === cat).length;
+            return (
+              <button
+                class="category-filter-btn px-2.5 py-1 rounded-md text-xs font-mono border border-cyan-900/40 bg-cyber-900/60 text-slate-300 hover:border-cyan-400/60 hover:text-cyan-300 transition-all"
+                data-category={cat}
+              >
+                {cat} ({count})
+              </button>
+            );
+          })
+        }
+      </div>
+    </div>
+
+    <!-- Posts Grid -->
+    <div id="posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+        sortedPosts.map((post) => (
+          <div
+            class="post-item"
+            data-title={post.data.title.toLowerCase()}
+            data-desc={post.data.description.toLowerCase()}
+            data-category={post.data.category}
+            data-tags={post.data.tags.join(',').toLowerCase()}
+          >
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              tags={post.data.tags}
+              category={post.data.category}
+              slug={post.id}
+              readingTime={post.data.readingTime}
+            />
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden cyber-card p-12 text-center max-w-md mx-auto">
+      <AlertCircle class="w-8 h-8 text-cyan-400 mx-auto mb-3 opacity-60" />
+      <h3 class="text-sm font-semibold text-slate-200 mb-1">Không tìm thấy bài viết nào</h3>
+      <p class="text-xs text-slate-400">
+        Hãy thử tìm với từ khóa khác hoặc xóa bộ lọc danh mục.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  function setupSearchAndFilter() {
+    const searchInput = document.getElementById('post-search') as HTMLInputElement | null;
+    const catButtons = document.querySelectorAll('.category-filter-btn');
+    const postItems = document.querySelectorAll('.post-item');
+    const emptyState = document.getElementById('empty-state');
+
+    if (!searchInput) return;
+
+    let selectedCategory = 'all';
+
+    function filterPosts() {
+      const query = searchInput?.value.trim().toLowerCase() || '';
+      let visibleCount = 0;
+
+      postItems.forEach((item) => {
+        const el = item as HTMLElement;
+        const title = el.dataset.title || '';
+        const desc = el.dataset.desc || '';
+        const cat = el.dataset.category || '';
+        const tags = el.dataset.tags || '';
+
+        const matchesQuery = !query || title.includes(query) || desc.includes(query) || tags.includes(query);
+        const matchesCategory = selectedCategory === 'all' || cat === selectedCategory;
+
+        if (matchesQuery && matchesCategory) {
+          el.style.display = 'block';
+          visibleCount++;
+        } else {
+          el.style.display = 'none';
+        }
+      });
+
+      if (emptyState) {
+        if (visibleCount === 0) {
+          emptyState.classList.remove('hidden');
+        } else {
+          emptyState.classList.add('hidden');
+        }
+      }
+    }
+
+    searchInput.addEventListener('input', filterPosts);
+
+    catButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        catButtons.forEach((b) => {
+          b.classList.remove('bg-cyan-500/20', 'text-cyan-300', 'border-cyan-400', 'shadow-[0_0_10px_rgba(0,242,254,0.3)]');
+          b.classList.add('border-cyan-900/40', 'bg-cyber-900/60', 'text-slate-300');
+        });
+
+        btn.classList.add('bg-cyan-500/20', 'text-cyan-300', 'border-cyan-400', 'shadow-[0_0_10px_rgba(0,242,254,0.3)]');
+        btn.classList.remove('border-cyan-900/40', 'bg-cyber-900/60', 'text-slate-300');
+
+        selectedCategory = btn.getAttribute('data-category') || 'all';
+        filterPosts();
+      });
+    });
+  }
+
+  setupSearchAndFilter();
+  document.addEventListener('astro:after-swap', setupSearchAndFilter);
+</script>

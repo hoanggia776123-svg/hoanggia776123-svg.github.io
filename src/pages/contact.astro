@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Mail, Github, MessageSquare, Copy, Check, Send, ExternalLink, MapPin } from 'lucide-astro';
+
+const email = 'your-email@example.com'; // Placeholder: [YOUR_EMAIL]
+---
+
+<BaseLayout
+  title="Liên hệ // [YOUR_NAME]"
+  description="Thông tin liên hệ, kênh trao đổi công việc và mạng xã hội cá nhân."
+>
+  <div class="max-w-3xl mx-auto space-y-12">
+    <!-- Header -->
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-900 border border-cyan-500/30 text-xs font-mono text-cyan-400 mb-4">
+        <Mail class="w-3.5 h-3.5" />
+        <span>COMMUNICATION // CONTACT</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-3">
+        Kênh Liên hệ
+      </h1>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        Bạn có câu hỏi, đề xuất hợp tác hay ý tưởng muốn cùng thảo luận? Hãy liên hệ với tôi qua các kênh dưới đây.
+      </p>
+    </div>
+
+    <!-- Contact Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <!-- Email Card -->
+      <div class="cyber-card p-6 flex flex-col justify-between">
+        <div>
+          <div class="w-10 h-10 rounded-lg bg-cyan-950/60 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-4">
+            <Mail class="w-5 h-5" />
+          </div>
+          <h2 class="text-base font-semibold text-slate-100 mb-1">Email Trực tiếp</h2>
+          <p class="text-xs text-slate-400 mb-4">
+            Kênh liên lạc chính cho các yêu cầu công việc hoặc trao đổi chuyên sâu.
+          </p>
+          <div class="p-2.5 rounded bg-cyber-950 border border-slate-800 font-mono text-xs text-cyan-300 break-all select-all mb-4">
+            [YOUR_EMAIL]
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-4 border-t border-slate-800">
+          <a
+            href="mailto:[YOUR_EMAIL]"
+            class="flex-1 px-3 py-2 rounded-md bg-cyan-400 text-slate-950 font-mono text-xs font-semibold hover:bg-cyan-300 transition-all text-center flex items-center justify-center gap-1.5"
+          >
+            <Send class="w-3.5 h-3.5" />
+            <span>Gửi Email</span>
+          </a>
+
+          <button
+            id="copy-email-btn"
+            type="button"
+            data-email="[YOUR_EMAIL]"
+            class="px-3 py-2 rounded-md bg-cyber-900 border border-cyan-500/30 text-slate-300 hover:text-cyan-300 hover:border-cyan-400 transition-all flex items-center justify-center gap-1.5 text-xs font-mono"
+            aria-label="Sao chép địa chỉ email"
+          >
+            <Copy class="w-3.5 h-3.5" id="copy-icon" />
+            <Check class="w-3.5 h-3.5 text-emerald-400 hidden" id="check-icon" />
+            <span id="copy-text">Sao chép</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- GitHub Card -->
+      <div class="cyber-card p-6 flex flex-col justify-between">
+        <div>
+          <div class="w-10 h-10 rounded-lg bg-purple-950/60 border border-purple-500/30 text-purple-400 flex items-center justify-center mb-4">
+            <Github class="w-5 h-5" />
+          </div>
+          <h2 class="text-base font-semibold text-slate-100 mb-1">GitHub</h2>
+          <p class="text-xs text-slate-400 mb-4">
+            Nơi lưu trữ các dự án mã nguồn mở, đồ án cá nhân và lịch sử commit.
+          </p>
+          <div class="p-2.5 rounded bg-cyber-950 border border-slate-800 font-mono text-xs text-purple-300 break-all select-all mb-4">
+            github.com/hoanggia776123-svg
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800">
+          <a
+            href="https://github.com/hoanggia776123-svg"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full px-3 py-2 rounded-md bg-cyber-900 border border-purple-500/40 text-purple-300 hover:bg-purple-950/50 hover:border-purple-400 font-mono text-xs font-semibold transition-all text-center flex items-center justify-center gap-1.5"
+          >
+            <ExternalLink class="w-3.5 h-3.5" />
+            <span>Mở hồ sơ GitHub</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instructions note for owner -->
+    <div class="cyber-card p-6 border-cyan-500/30 bg-cyber-900/40">
+      <h3 class="text-xs font-mono font-semibold text-cyan-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+        <MessageSquare class="w-4 h-4" />
+        <span>// Hướng dẫn tùy biến</span>
+      </h3>
+      <p class="text-xs text-slate-400 leading-relaxed">
+        Bạn có thể thay thế <code class="text-cyan-300 bg-slate-900 px-1 py-0.5 rounded font-mono">[YOUR_EMAIL]</code> bằng email thực tế của mình trong tệp <code class="text-cyan-300 bg-slate-900 px-1 py-0.5 rounded font-mono">src/pages/contact.astro</code>. Website tuân thủ thiết kế tĩnh hoàn toàn để tối ưu bảo mật và tốc độ, không sử dụng biểu mẫu gửi giả lập khi chưa có dịch vụ máy chủ xử lý.
+      </p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  function setupCopyEmail() {
+    const btn = document.getElementById('copy-email-btn');
+    const copyIcon = document.getElementById('copy-icon');
+    const checkIcon = document.getElementById('check-icon');
+    const copyText = document.getElementById('copy-text');
+
+    if (!btn) return;
+
+    btn.addEventListener('click', async () => {
+      const email = btn.getAttribute('data-email') || '';
+      try {
+        await navigator.clipboard.writeText(email);
+        copyIcon?.classList.add('hidden');
+        checkIcon?.classList.remove('hidden');
+        if (copyText) copyText.textContent = 'Đã chép!';
+
+        setTimeout(() => {
+          copyIcon?.classList.remove('hidden');
+          checkIcon?.classList.add('hidden');
+          if (copyText) copyText.textContent = 'Sao chép';
+        }, 2000);
+      } catch (err) {
+        if (copyText) copyText.textContent = 'Lỗi!';
+      }
+    });
+  }
+
+  setupCopyEmail();
+  document.addEventListener('astro:after-swap', setupCopyEmail);
+</script>

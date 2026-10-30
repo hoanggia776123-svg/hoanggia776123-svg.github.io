@@ -1,0 +1,85 @@
+---
+import Tag from './Tag.astro';
+import { FlaskConical, ExternalLink, Github, Sparkles } from 'lucide-astro';
+
+interface Props {
+  title: string;
+  description: string;
+  category: 'AI' | 'UI Effects' | 'Web Experiments' | 'Tools';
+  status: 'Exploring' | 'In Progress' | 'Completed';
+  tags: string[];
+  demoUrl?: string;
+  repoUrl?: string;
+  date?: string;
+}
+
+const { title, description, category, status, tags, demoUrl, repoUrl, date } = Astro.props;
+
+const statusColors = {
+  Completed: 'text-emerald-400 border-emerald-500/40 bg-emerald-950/40',
+  'In Progress': 'text-cyan-400 border-cyan-500/40 bg-cyan-950/40',
+  Exploring: 'text-purple-400 border-purple-500/40 bg-purple-950/40',
+};
+---
+
+<div class="cyber-card p-6 flex flex-col justify-between group">
+  <div>
+    <!-- Top Meta -->
+    <div class="flex items-center justify-between text-xs font-mono mb-3">
+      <span class="inline-flex items-center gap-1.5 text-cyan-400">
+        <FlaskConical class="w-3.5 h-3.5" />
+        <span>{category}</span>
+      </span>
+      <span class={`text-[10px] px-2 py-0.5 rounded border uppercase tracking-wider ${statusColors[status] || statusColors['In Progress']}`}>
+        {status}
+      </span>
+    </div>
+
+    <!-- Title -->
+    <h3 class="text-base font-semibold text-slate-100 group-hover:text-cyan-300 transition-colors mb-2">
+      {title}
+    </h3>
+
+    <!-- Description -->
+    <p class="text-xs text-slate-400 leading-relaxed mb-4">
+      {description}
+    </p>
+
+    <!-- Tags -->
+    <div class="flex flex-wrap gap-1.5 mb-4">
+      {tags.map((tag) => (
+        <Tag tag={tag} />
+      ))}
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono">
+    {date ? <span class="text-slate-400 text-[11px]">{date}</span> : <span></span>}
+
+    <div class="flex items-center gap-3">
+      {repoUrl && (
+        <a
+          href={repoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-slate-400 hover:text-cyan-300 transition-colors"
+          title="Mã nguồn thử nghiệm"
+        >
+          <Github class="w-4 h-4" />
+        </a>
+      )}
+      {demoUrl && (
+        <a
+          href={demoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-slate-400 hover:text-cyan-300 transition-colors"
+          title="Chạy thử nghiệm"
+        >
+          <ExternalLink class="w-4 h-4" />
+        </a>
+      )}
+    </div>
+  </div>
+</div>

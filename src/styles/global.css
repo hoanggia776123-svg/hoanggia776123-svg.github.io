@@ -1,0 +1,155 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+:root {
+  --color-bg: #070b14;
+  --color-panel: rgba(13, 21, 39, 0.7);
+  --color-border: rgba(56, 189, 248, 0.15);
+  --color-border-glow: rgba(0, 242, 254, 0.4);
+  --color-cyan: #00f2fe;
+  --color-blue: #3b82f6;
+  --color-purple: #a855f7;
+  --color-emerald: #10b981;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+  background-color: var(--color-bg);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #e2e8f0;
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050811;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0284c7;
+}
+
+/* Text Selection */
+::selection {
+  background: rgba(0, 242, 254, 0.25);
+  color: #ffffff;
+}
+
+/* Sci-Fi Grid Pattern Background */
+.bg-cyber-grid {
+  background-image: 
+    linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Sci-Fi Panel Card with subtle glassmorphism and crisp borders */
+.cyber-card {
+  background: rgba(11, 18, 33, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.cyber-card:hover {
+  border-color: rgba(0, 242, 254, 0.45);
+  box-shadow: 0 0 25px -5px rgba(0, 242, 254, 0.15);
+}
+
+/* Tech Corner Accents */
+.tech-corner {
+  position: relative;
+}
+
+.tech-corner::before,
+.tech-corner::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: #00f2fe;
+  pointer-events: none;
+  transition: all 0.2s ease;
+}
+
+.tech-corner::before {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid #00f2fe;
+  border-left: 2px solid #00f2fe;
+}
+
+.tech-corner::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid #00f2fe;
+  border-right: 2px solid #00f2fe;
+}
+
+/* Glow Utilities */
+.text-glow-cyan {
+  text-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+}
+
+.text-glow-purple {
+  text-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+}
+
+.border-glow-cyan {
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+}
+
+/* Code block terminal style */
+pre {
+  background-color: #0b1120 !important;
+  border: 1px solid rgba(56, 189, 248, 0.2) !important;
+  border-radius: 0.5rem !important;
+  padding: 1rem !important;
+  position: relative;
+}
+
+/* Reading Progress Bar */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00f2fe, #3b82f6, #a855f7);
+  z-index: 100;
+  width: 0%;
+  transition: width 0.1s ease-out;
+}
+
+/* Accessibility: prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

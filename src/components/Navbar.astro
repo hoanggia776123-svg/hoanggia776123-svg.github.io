@@ -1,0 +1,130 @@
+---
+import { url } from '../utils/base';
+import { Terminal, Menu, X, Cpu } from 'lucide-astro';
+
+const pathname = Astro.url.pathname;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+function isActive(path: string) {
+  const target = url(path);
+  if (path === '/') {
+    return pathname === target || pathname === `${target}/` || pathname === base || pathname === `${base}/`;
+  }
+  return pathname.startsWith(target);
+}
+
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about/' },
+  { label: 'Posts', href: '/posts/' },
+  { label: 'Projects', href: '/projects/' },
+  { label: 'Lab', href: '/lab/' },
+  { label: 'Contact', href: '/contact/' },
+];
+---
+
+<header class="sticky top-0 z-50 w-full backdrop-blur-md bg-cyber-950/80 border-b border-cyan-500/15">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <!-- Brand / Logo -->
+    <a href={url('/')} class="flex items-center gap-2 group">
+      <div class="w-8 h-8 rounded-lg bg-cyber-900 border border-cyan-500/40 flex items-center justify-center text-cyan-400 group-hover:border-cyan-400 group-hover:shadow-[0_0_12px_rgba(0,242,254,0.4)] transition-all">
+        <Terminal class="w-4 h-4" />
+      </div>
+      <div class="flex flex-col">
+        <span class="font-mono text-sm font-semibold tracking-wider text-slate-100 group-hover:text-cyan-400 transition-colors">
+          [HGIA] <span class="text-cyan-400 text-xs">// LAB</span>
+        </span>
+        <span class="text-[10px] font-mono text-slate-400 tracking-tight">AI & SYSTEMS DEV</span>
+      </div>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:flex items-center gap-1 font-mono text-xs">
+      {
+        navItems.map((item) => {
+          const active = isActive(item.href);
+          return (
+            <a
+              href={url(item.href)}
+              class={`px-3 py-1.5 rounded-md transition-all duration-200 relative ${
+                active
+                  ? 'text-cyan-300 bg-cyan-950/60 border border-cyan-500/40 shadow-[0_0_10px_rgba(0,242,254,0.2)]'
+                  : 'text-slate-300 hover:text-cyan-300 hover:bg-cyber-900/60 border border-transparent'
+              }`}
+            >
+              {active && <span class="text-cyan-400 mr-1">&gt;</span>}
+              {item.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+
+    <!-- Lab Status Indicator & Mobile Toggle -->
+    <div class="flex items-center gap-3">
+      <div class="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-full bg-cyber-900 border border-emerald-500/30 text-[11px] font-mono text-emerald-400">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <span class="relative">ONLINE</span>
+      </div>
+
+      <button
+        id="mobile-menu-btn"
+        type="button"
+        class="md:hidden p-2 rounded-md bg-cyber-900 border border-cyan-500/30 text-slate-300 hover:text-cyan-400 transition-colors"
+        aria-label="Toggle navigation menu"
+        aria-expanded="false"
+      >
+        <Menu class="w-5 h-5 block" id="menu-icon-open" />
+        <X class="w-5 h-5 hidden" id="menu-icon-close" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-b border-cyan-500/20 bg-cyber-950/95 backdrop-blur-xl px-4 pt-2 pb-6">
+    <nav class="flex flex-col gap-2 font-mono text-sm mt-2">
+      {
+        navItems.map((item) => {
+          const active = isActive(item.href);
+          return (
+            <a
+              href={url(item.href)}
+              class={`px-3 py-2 rounded-md transition-all ${
+                active
+                  ? 'text-cyan-300 bg-cyan-950/70 border border-cyan-500/40'
+                  : 'text-slate-300 hover:text-cyan-300 hover:bg-cyber-900'
+              }`}
+            >
+              <span class="text-cyan-400 mr-2">{active ? '>' : '#'}</span>
+              {item.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+  </div>
+</header>
+
+<script>
+  function setupMobileMenu() {
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const openIcon = document.getElementById('menu-icon-open');
+    const closeIcon = document.getElementById('menu-icon-close');
+
+    if (!btn || !menu) return;
+
+    btn.addEventListener('click', () => {
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', (!isExpanded).toString());
+      menu.classList.toggle('hidden');
+      if (openIcon && closeIcon) {
+        openIcon.classList.toggle('hidden');
+        closeIcon.classList.toggle('hidden');
+      }
+    });
+  }
+
+  setupMobileMenu();
+  document.addEventListener('astro:after-swap', setupMobileMenu);
+</script>

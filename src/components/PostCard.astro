@@ -1,0 +1,75 @@
+---
+import { url } from '../utils/base';
+import Tag from './Tag.astro';
+import { Calendar, Clock, ArrowRight, BookOpen } from 'lucide-astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  tags: string[];
+  category: string;
+  slug: string;
+  readingTime?: number;
+}
+
+const { title, description, pubDate, tags, category, slug, readingTime = 5 } = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat('vi-VN', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+}).format(pubDate);
+---
+
+<article class="cyber-card p-6 flex flex-col justify-between group">
+  <div>
+    <!-- Category & Meta -->
+    <div class="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-3">
+      <span class="px-2 py-0.5 rounded border border-cyan-500/30 bg-cyan-950/40 text-cyan-300">
+        {category}
+      </span>
+      <div class="flex items-center gap-3">
+        <span class="flex items-center gap-1">
+          <Calendar class="w-3 h-3 text-cyan-400" />
+          <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        </span>
+        <span class="flex items-center gap-1">
+          <Clock class="w-3 h-3 text-purple-400" />
+          <span>{readingTime} phút</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <h3 class="text-base sm:text-lg font-semibold text-slate-100 group-hover:text-cyan-300 transition-colors mb-2">
+      <a href={url(`/posts/${slug}/`)} class="hover:underline flex items-center justify-between">
+        <span>{title}</span>
+        <ArrowRight class="w-4 h-4 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all text-cyan-400 flex-shrink-0 ml-2" />
+      </a>
+    </h3>
+
+    <!-- Description -->
+    <p class="text-xs text-slate-400 leading-relaxed line-clamp-3 mb-4">
+      {description}
+    </p>
+
+    <!-- Tags -->
+    <div class="flex flex-wrap gap-1.5 mb-4">
+      {tags.map((tag) => (
+        <Tag tag={tag} />
+      ))}
+    </div>
+  </div>
+
+  <!-- Read CTA -->
+  <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono">
+    <a
+      href={url(`/posts/${slug}/`)}
+      class="text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-1 transition-colors"
+    >
+      <span>Đọc bài viết</span>
+      <span>&rarr;</span>
+    </a>
+  </div>
+</article>

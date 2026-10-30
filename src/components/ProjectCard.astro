@@ -1,0 +1,99 @@
+---
+import { url } from '../utils/base';
+import Tag from './Tag.astro';
+import { ExternalLink, Github, ArrowRight, Layers } from 'lucide-astro';
+
+interface Props {
+  title: string;
+  description: string;
+  date?: string | Date;
+  techStack: string[];
+  demoUrl?: string;
+  repoUrl?: string;
+  status: 'completed' | 'in-progress' | 'archived';
+  slug: string;
+  featured?: boolean;
+}
+
+const { title, description, techStack, demoUrl, repoUrl, status, slug, featured = false } = Astro.props;
+
+const statusConfig = {
+  completed: { label: 'COMPLETED', color: 'text-emerald-400 border-emerald-500/40 bg-emerald-950/40' },
+  'in-progress': { label: 'IN PROGRESS', color: 'text-cyan-400 border-cyan-500/40 bg-cyan-950/40' },
+  archived: { label: 'ARCHIVED', color: 'text-slate-400 border-slate-700 bg-slate-900/60' },
+};
+
+const currentStatus = statusConfig[status] || statusConfig.completed;
+---
+
+<div class={`cyber-card p-6 flex flex-col justify-between group ${featured ? 'border-cyan-500/40' : ''}`}>
+  <!-- Top meta -->
+  <div>
+    <div class="flex items-center justify-between gap-2 mb-3">
+      <span class={`text-[10px] font-mono px-2 py-0.5 rounded border uppercase tracking-wider ${currentStatus.color}`}>
+        {currentStatus.label}
+      </span>
+      {featured && (
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded border border-purple-500/40 bg-purple-950/40 text-purple-300">
+          FEATURED
+        </span>
+      )}
+    </div>
+
+    <!-- Title -->
+    <h3 class="text-lg font-semibold text-slate-100 group-hover:text-cyan-300 transition-colors mb-2">
+      <a href={url(`/projects/${slug}/`)} class="hover:underline flex items-center justify-between">
+        <span>{title}</span>
+        <ArrowRight class="w-4 h-4 opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all text-cyan-400" />
+      </a>
+    </h3>
+
+    <!-- Description -->
+    <p class="text-xs text-slate-400 leading-relaxed line-clamp-3 mb-4">
+      {description}
+    </p>
+
+    <!-- Tech Stack Tags -->
+    <div class="flex flex-wrap gap-1.5 mb-5">
+      {techStack.map((tech) => (
+        <Tag tag={tech} />
+      ))}
+    </div>
+  </div>
+
+  <!-- Footer Actions -->
+  <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-mono">
+    <a
+      href={url(`/projects/${slug}/`)}
+      class="text-cyan-400 hover:text-cyan-300 inline-flex items-center gap-1 font-medium transition-colors"
+    >
+      <span>Chi tiết</span>
+      <span>&rarr;</span>
+    </a>
+
+    <div class="flex items-center gap-3">
+      {repoUrl && (
+        <a
+          href={repoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-slate-400 hover:text-cyan-300 transition-colors"
+          title="Xem mã nguồn GitHub"
+        >
+          <Github class="w-4 h-4" />
+        </a>
+      )}
+      {demoUrl && (
+        <a
+          href={demoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-slate-400 hover:text-cyan-300 transition-colors"
+          title="Xem bản demo"
+        >
+          <ExternalLink class="w-4 h-4" />
+        </a>
+      )}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,180 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../utils/base';
+import {
+  User,
+  GraduationCap,
+  Target,
+  Terminal,
+  Code2,
+  Calendar,
+  Download,
+  CheckCircle2,
+  ArrowRight,
+  Sparkles,
+} from 'lucide-astro';
+
+const timelineEvents = [
+  {
+    year: '2026',
+    title: 'Nghiên cứu AI & Web hiện đại',
+    description: 'Tập trung nghiên cứu Astro v5, kiến trúc Static Site không máy chủ, tối ưu hiệu năng và tích hợp mô hình ngôn ngữ lớn (LLM).',
+    status: 'Hiện tại',
+  },
+  {
+    year: '2025',
+    title: 'Phát triển Full-stack & Hệ thống phân tán',
+    description: 'Thực hiện các đồ án web với TypeScript, React, Next.js, Node.js và xây dựng RESTful APIs.',
+    status: 'Hoàn thành',
+  },
+  {
+    year: '2024',
+    title: 'Khởi đầu nền tảng Lập trình & Khoa học máy tính',
+    description: 'Nắm vững cấu trúc dữ liệu và giải thuật, lập trình hướng đối tượng, kiến trúc hệ điều hành và cơ sở dữ liệu.',
+    status: 'Hoàn thành',
+  },
+];
+
+const skillCategories = [
+  {
+    name: 'Ngôn ngữ lập trình',
+    skills: ['TypeScript', 'JavaScript (ESNext)', 'Python', 'SQL', 'HTML5 & CSS3'],
+  },
+  {
+    name: 'Frontend Development',
+    skills: ['Astro', 'React', 'Next.js', 'Tailwind CSS', 'Responsive UI / Mobile First'],
+  },
+  {
+    name: 'Backend & Cơ sở dữ liệu',
+    skills: ['Node.js', 'FastAPI', 'Express', 'PostgreSQL', 'SQLite', 'RESTful API'],
+  },
+  {
+    name: 'Công cụ & DevOps',
+    skills: ['Git / GitHub', 'GitHub Actions (CI/CD)', 'Docker', 'VS Code', 'Linux Terminal'],
+  },
+];
+---
+
+<BaseLayout
+  title="Giới thiệu // [YOUR_NAME]"
+  description="Tìm hiểu về hành trình học tập, định hướng nghiên cứu và kỹ năng kỹ thuật của [YOUR_NAME]."
+>
+  <div class="max-w-4xl mx-auto space-y-16">
+    <!-- Header -->
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-900 border border-cyan-500/30 text-xs font-mono text-cyan-400 mb-4">
+        <User class="w-3.5 h-3.5" />
+        <span>IDENTITY // PROFILE</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-4">
+        Hành trình & Định hướng
+      </h1>
+      <p class="text-sm sm:text-base text-slate-400 leading-relaxed">
+        Chào bạn! Tôi là <strong class="text-slate-200">[YOUR_NAME]</strong>, hiện đang học tập và làm việc với định hướng <span class="text-cyan-400 font-mono">[YOUR_ROLE]</span>.
+      </p>
+    </div>
+
+    <!-- 1. Biography Card -->
+    <div class="cyber-card p-6 sm:p-8">
+      <h2 class="text-sm font-mono font-semibold text-cyan-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+        <Terminal class="w-4 h-4" />
+        <span>// Giới thiệu bản thân</span>
+      </h2>
+      <div class="space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
+        <p>
+          Tôi có niềm đam mê đặc biệt với việc xây dựng các sản phẩm số tinh gọn, tối ưu tốc độ tải và mang lại trải nghiệm người dùng ấn tượng. Tôi tin rằng một website tốt không chỉ cần giao diện đẹp mắt mà còn phải có nền tảng mã nguồn vững chắc, dễ bảo trì và tôn trọng quyền riêng tư cũng như hiệu năng của người dùng.
+        </p>
+        <p>
+          Trọng tâm nghiên cứu hiện tại của tôi xoay quanh hệ sinh thái Web hiện đại (Astro, TypeScript, Tailwind) và việc ứng dụng trí tuệ nhân tạo (AI/LLM) vào các công cụ hỗ trợ công việc thực tiễn.
+        </p>
+      </div>
+
+      <!-- CV Download area -->
+      <div class="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-mono text-slate-400">Tài liệu hồ sơ năng lực (Curriculum Vitae)</span>
+          <p class="text-[11px] text-slate-400">Bạn có thể thay thế tệp cv.pdf trong thư mục public khi sẵn sàng.</p>
+        </div>
+
+        <a
+          href={url('/cv.pdf')}
+          download
+          class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-mono text-xs font-medium bg-cyber-900 border border-cyan-500/40 text-cyan-300 hover:border-cyan-400 hover:bg-cyan-950/40 transition-all self-start sm:self-auto"
+        >
+          <Download class="w-4 h-4" />
+          <span>Tải xuống CV (PDF)</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 2. Technical Skills Matrix -->
+    <div>
+      <h2 class="text-xs font-mono font-semibold text-cyan-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+        <Code2 class="w-4 h-4" />
+        <span>// Kỹ năng theo nhóm chuyên môn</span>
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {
+          skillCategories.map((cat) => (
+            <div class="cyber-card p-6">
+              <h3 class="text-xs font-mono font-semibold text-slate-200 mb-4 pb-2 border-b border-slate-800">
+                {cat.name}
+              </h3>
+              <ul class="space-y-2">
+                {cat.skills.map((skill) => (
+                  <li class="flex items-center gap-2.5 text-xs text-slate-300 font-mono">
+                    <CheckCircle2 class="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
+                    <span>{skill}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- 3. Learning & Project Timeline -->
+    <div>
+      <h2 class="text-xs font-mono font-semibold text-cyan-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+        <Calendar class="w-4 h-4" />
+        <span>// Cột mốc phát triển</span>
+      </h2>
+
+      <div class="relative border-l border-cyan-500/30 pl-6 ml-3 space-y-8">
+        {
+          timelineEvents.map((evt) => (
+            <div class="relative group">
+              <!-- Node dot -->
+              <div class="absolute -left-[31px] top-1 w-3 h-3 rounded-full bg-cyber-950 border-2 border-cyan-400 group-hover:scale-125 transition-transform"></div>
+
+              <div class="cyber-card p-5">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="font-mono text-xs font-bold text-cyan-400">{evt.year}</span>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded border border-cyan-500/30 bg-cyan-950/40 text-cyan-300">
+                    {evt.status}
+                  </span>
+                </div>
+                <h3 class="text-sm font-semibold text-slate-100 mb-1">{evt.title}</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">{evt.description}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="pt-8 border-t border-cyan-500/15 flex flex-wrap items-center justify-between gap-4">
+      <span class="text-xs font-mono text-slate-400">Xem thêm các dự án tôi đã từng thực hiện:</span>
+      <a
+        href={url('/projects/')}
+        class="inline-flex items-center gap-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 font-semibold"
+      >
+        <span>Chuyển sang trang Dự án</span>
+        <ArrowRight class="w-4 h-4" />
+      </a>
+    </div>
+  </div>
+</BaseLayout>

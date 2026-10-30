@@ -1,0 +1,246 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LabCard from '../components/LabCard.astro';
+import { getCollection } from 'astro:content';
+import { FlaskConical, Sparkles, Terminal, Play, Pause, RefreshCw } from 'lucide-astro';
+
+const allLabs = await getCollection('labs');
+const categories = ['AI', 'UI Effects', 'Web Experiments', 'Tools'] as const;
+---
+
+<BaseLayout
+  title="Phòng thí nghiệm cá nhân // [YOUR_NAME]"
+  description="Khu vực thử nghiệm công nghệ, animation, Canvas 2D và mini demo tương tác."
+>
+  <div class="space-y-12">
+    <!-- Header -->
+    <div>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-900 border border-purple-500/30 text-xs font-mono text-purple-400 mb-4">
+        <FlaskConical class="w-3.5 h-3.5" />
+        <span>R&D // EXPERIMENTAL LAB</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-100 tracking-tight mb-3">
+        Phòng thí nghiệm Số
+      </h1>
+      <p class="text-sm text-slate-400 max-w-2xl leading-relaxed">
+        Không gian nghiên cứu mở dành cho các thuật toán đồ họa canvas, hiệu ứng vi tính và ứng dụng trí tuệ nhân tạo thử nghiệm.
+      </p>
+    </div>
+
+    <!-- Interactive Interactive Experiment 1: Cyber Matrix Terminal -->
+    <div class="cyber-card p-6 tech-corner">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-4 border-b border-slate-800">
+        <div>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded border border-emerald-500/40 bg-emerald-950/40 text-emerald-400 uppercase">
+            LIVE DEMO 01
+          </span>
+          <h2 class="text-base font-semibold text-slate-100 mt-1 flex items-center gap-2">
+            <span>Cyber Matrix Stream (Canvas 2D)</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Mô phỏng dòng ký tự ma trận kỹ thuật số kết hợp phổ màu lục phát quang Neon.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2 font-mono text-xs">
+          <button
+            id="matrix-toggle"
+            class="px-3 py-1.5 rounded bg-cyber-900 border border-cyan-500/30 text-slate-300 hover:text-cyan-300 hover:border-cyan-400 transition-all flex items-center gap-1.5"
+          >
+            <Pause class="w-3.5 h-3.5 text-cyan-400" id="matrix-pause-icon" />
+            <Play class="w-3.5 h-3.5 text-cyan-400 hidden" id="matrix-play-icon" />
+            <span id="matrix-btn-text">Tạm dừng</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Canvas frame -->
+      <div class="relative w-full h-56 bg-[#04070e] rounded-lg overflow-hidden border border-cyan-500/20">
+        <canvas id="matrix-canvas" class="w-full h-full block"></canvas>
+        <div class="absolute bottom-2 right-3 font-mono text-[10px] text-emerald-400/60 pointer-events-none">
+          CANVAS_FPS: ~60 | COLUMNS: AUTO
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Experiment 2: Quick Hash & Binary Tool -->
+    <div class="cyber-card p-6">
+      <div class="mb-4 pb-4 border-b border-slate-800">
+        <span class="text-[10px] font-mono px-2 py-0.5 rounded border border-purple-500/40 bg-purple-950/40 text-purple-300 uppercase">
+          LIVE DEMO 02
+        </span>
+        <h2 class="text-base font-semibold text-slate-100 mt-1">
+          Bản băm SHA-256 & Chuỗi nhị phân tức thì
+        </h2>
+        <p class="text-xs text-slate-400 mt-0.5">
+          Thử nghiệm Web Cryptography API tính toán mã hash SHA-256 an toàn hoàn toàn tại trình duyệt.
+        </p>
+      </div>
+
+      <div class="space-y-4 font-mono text-xs">
+        <div>
+          <label for="hash-input" class="block text-slate-400 mb-1.5 text-[11px]">
+            &gt; NHẬP CHUỖI VĂN BẢN ĐẦU VÀO:
+          </label>
+          <input
+            id="hash-input"
+            type="text"
+            value="Antigravity Sci-Fi Lab"
+            class="w-full px-3 py-2 rounded bg-cyber-950 border border-cyan-500/30 text-cyan-300 focus:outline-none focus:border-cyan-400"
+          />
+        </div>
+
+        <div class="p-3 rounded bg-cyber-950/80 border border-slate-800 space-y-2">
+          <div>
+            <span class="text-[10px] text-slate-400 uppercase">SHA-256 HASH (HEX):</span>
+            <div id="hash-output" class="text-emerald-400 break-all select-all font-mono text-[11px] pt-0.5">
+              Calculating...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lab Experiments Directory List -->
+    <div>
+      <h2 class="text-xs font-mono font-semibold text-cyan-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+        <Terminal class="w-4 h-4" />
+        <span>// Thư viện các thử nghiệm</span>
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {
+          allLabs.map((lab) => (
+            <LabCard
+              title={lab.data.title}
+              description={lab.data.description}
+              category={lab.data.category}
+              status={lab.data.status}
+              tags={lab.data.tags}
+              demoUrl={lab.data.demoUrl}
+              repoUrl={lab.data.repoUrl}
+              date={lab.data.date}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // 1. Matrix Canvas Demo
+  function initMatrix() {
+    const canvas = document.getElementById('matrix-canvas') as HTMLCanvasElement | null;
+    const toggleBtn = document.getElementById('matrix-toggle');
+    const pauseIcon = document.getElementById('matrix-pause-icon');
+    const playIcon = document.getElementById('matrix-play-icon');
+    const btnText = document.getElementById('matrix-btn-text');
+
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let width = (canvas.width = canvas.parentElement?.clientWidth || 600);
+    let height = (canvas.height = canvas.parentElement?.clientHeight || 220);
+
+    const letters = '0123456789ABCDEFΑΒΓΔΕΖΗΘΙΚΛΜ';
+    const fontSize = 12;
+    let columns = Math.floor(width / fontSize);
+    let drops = Array(columns).fill(1);
+
+    let isRunning = true;
+    let animationId: number;
+    let lastTime = 0;
+    const interval = 45; // ~22fps for classic digital rain effect
+
+    function draw(currentTime: number) {
+      if (!ctx) return;
+
+      if (currentTime - lastTime > interval) {
+        lastTime = currentTime;
+        ctx.fillStyle = 'rgba(4, 7, 14, 0.12)';
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.fillStyle = '#00f2fe';
+        ctx.font = `${fontSize}px monospace`;
+
+        for (let i = 0; i < drops.length; i++) {
+          const text = letters.charAt(Math.floor(Math.random() * letters.length));
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+          if (drops[i] * fontSize > height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+
+      if (isRunning) {
+        animationId = requestAnimationFrame(draw);
+      }
+    }
+
+    animationId = requestAnimationFrame(draw);
+
+    toggleBtn?.addEventListener('click', () => {
+      isRunning = !isRunning;
+      if (isRunning) {
+        animationId = requestAnimationFrame(draw);
+        pauseIcon?.classList.remove('hidden');
+        playIcon?.classList.add('hidden');
+        if (btnText) btnText.textContent = 'Tạm dừng';
+      } else {
+        cancelAnimationFrame(animationId);
+        pauseIcon?.classList.add('hidden');
+        playIcon?.classList.remove('hidden');
+        if (btnText) btnText.textContent = 'Tiếp tục';
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = canvas.parentElement?.clientWidth || 600;
+      height = canvas.height = canvas.parentElement?.clientHeight || 220;
+      columns = Math.floor(width / fontSize);
+      drops = Array(columns).fill(1);
+    });
+
+    document.addEventListener('astro:before-swap', () => {
+      cancelAnimationFrame(animationId);
+    });
+  }
+
+  // 2. Hash Generator
+  async function initHasher() {
+    const input = document.getElementById('hash-input') as HTMLInputElement | null;
+    const output = document.getElementById('hash-output');
+    if (!input || !output) return;
+
+    async function calculate() {
+      const text = input.value;
+      if (!text) {
+        output.textContent = '(trống)';
+        return;
+      }
+      try {
+        const msgUint8 = new TextEncoder().encode(text);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+        output.textContent = hashHex;
+      } catch (err) {
+        output.textContent = 'Không hỗ trợ Web Cryptography';
+      }
+    }
+
+    input.addEventListener('input', calculate);
+    calculate();
+  }
+
+  initMatrix();
+  initHasher();
+  document.addEventListener('astro:after-swap', () => {
+    initMatrix();
+    initHasher();
+  });
+</script>
